@@ -1,4 +1,4 @@
-env.info('*** MOOSE GITHUB Commit Hash ID: 2026-02-06T12:56:08+01:00-01bd1e44284f148f9266c63454bc19b84470bd85 ***')
+env.info('*** MOOSE GITHUB Commit Hash ID: 2026-02-06T14:10:48+01:00-f8b5bd8002ab81f2bceb938f40b67148dcef9235 ***')
 if not MOOSE_DEVELOPMENT_FOLDER then
 MOOSE_DEVELOPMENT_FOLDER='Scripts'
 end
@@ -43244,6 +43244,11 @@ self:F2(speed)
 self.Vcruisemax=speed/3.6
 return self
 end
+function RAT:SetMinCruiseSpeed(speed)
+self:F2(speed)
+self.Vcruisemin=speed/3.6
+return self
+end
 function RAT:SetClimbRate(rate)
 self:F2(rate)
 rate=rate or self.Vclimb
@@ -43430,6 +43435,14 @@ elseif DCStype=="Saab340"then
 self.aircraft.length=19.73
 self.aircraft.height=6.97
 self.aircraft.width=21.44
+elseif DCStype=="vwv_l-1049"then
+self.aircraft.length=35.41
+self.aircraft.height=7.54
+self.aircraft.width=38.47
+elseif DCStype=="uh2b"then
+self.aircraft.length=11.48
+self.aircraft.height=4.11
+self.aircraft.width=13.41
 end
 self.aircraft.box=math.max(self.aircraft.length,self.aircraft.width)
 local text=string.format("\n******************************************************\n")
@@ -43794,7 +43807,12 @@ VxCruiseMax=math.min(self.Vcruisemax,self.aircraft.Vmax)
 else
 VxCruiseMax=math.min(self.aircraft.Vmax*0.90,250)
 end
-local VxCruiseMin=math.min(VxCruiseMax*0.70,166)
+local VxCruiseMin
+if self.Vcruisemin then
+VxCruiseMin=self.Vcruisemin
+else
+VxCruiseMin=math.min(VxCruiseMax*0.70,166)
+end
 local VxCruise=UTILS.RandomGaussian((VxCruiseMax-VxCruiseMin)/2+VxCruiseMin,(VxCruiseMax-VxCruiseMax)/4,VxCruiseMin,VxCruiseMax)
 local VxClimb=math.min(self.aircraft.Vmax*0.90,200)
 local VxDescent=math.min(self.aircraft.Vmax*0.60,140)
